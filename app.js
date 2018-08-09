@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
@@ -8,6 +9,7 @@ const exphbs = require('express-handlebars');
 //bring in routes
 const auth = require('./routes/auth');
 const index = require('./routes/index');
+const stories = require('./routes/stories');
 
 //load user model
 require('./models/User');
@@ -61,9 +63,13 @@ app.use((req, res, next) => {
     next();
 });
 
+//set static folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 //use routes brought in at top
 app.use('/auth', auth);
 app.use('/', index);
+app.use('/stories', stories);
 
 app.listen(port, () =>{
     console.log(`server started on port ${port}`);
