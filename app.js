@@ -6,6 +6,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 
 //load models
 require('./models/User');
@@ -23,7 +24,9 @@ const keys = require('./config/keys');
 const {
     truncate,
     stripTags,
-    formatDate
+    formatDate,
+    select,
+    editIcon
 } = require('./helpers/hbs');
 
 //connect to mongoose, pass in database as param
@@ -48,16 +51,22 @@ const port = process.env.PORT || 8080;
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+//method override middleware
+app.use(methodOverride('_method'));
+
 //handlebars middleware,
 //set default layout and point it to main.handlebars in views/layouts/main folder
 app.engine('handlebars', exphbs({
     helpers: {
         truncate: truncate,
         stripTags: stripTags,
-        formatDate: formatDate
+        formatDate: formatDate,
+        select: select,
+        editIcon: editIcon
     },
     defaultLayout: 'main'
 }));
+
 //set view engine
 app.set('view engine', 'handlebars');
 
